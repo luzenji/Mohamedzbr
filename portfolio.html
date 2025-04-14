@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Portfolio - [Your Name]</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- AOS Library for Scroll Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4f46e5; /* Indigo-600 */
+            --secondary-color: #a855f7; /* Purple-500 */
+            --accent-color: #ec4899; /* Pink-500 */
+            --light-bg: #f8f9fa; /* Lighter Gray */
+            --dark-text: #1f2937; /* Gray-800 */
+            --medium-text: #4b5563; /* Gray-600 */
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark-text);
+            background-color: white; /* Cleaner base */
+            line-height: 1.7;
+        }
+
+        .playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .section-bg {
+             background-color: var(--light-bg);
+        }
+
+        .portfolio-item {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* More dynamic ease */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portfolio-item .overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(79, 70, 229, 0.85); /* Primary color overlay */
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .portfolio-item:hover .overlay {
+            opacity: 1;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .portfolio-item img { /* Make sure image scales nicely */
+            transition: transform 0.3s ease-in-out;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .portfolio-item:hover img {
+            transform: scale(1.05);
+        }
+
+
+        .skill-bar-container {
+            margin-bottom: 1.75rem;
+        }
+        .skill-bar {
+            height: 8px; /* Slightly thinner */
+            border-radius: 4px;
+            background: #e5e7eb; /* Gray-200 */
+            overflow: hidden; /* Ensure fill stays inside */
+            position: relative;
+        }
+        .skill-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother transition */
+        }
+        .skill-percent {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .service-card {
+            transition: all 0.3s ease-out;
+            border: 1px solid #e5e7eb; /* Subtle border */
+        }
+        .service-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(79, 70, 229, 0.1); /* Primary color shadow */
+            border-color: var(--primary-color);
+        }
+        .service-icon-bg {
+             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+             color: white;
+             transition: all 0.3s ease-out;
+        }
+        .service-card:hover .service-icon-bg {
+            transform: rotate(-15deg) scale(1.1);
+        }
+
+        .accent-line {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            margin: 15px auto; /* Centered by default */
+            border-radius: 2px;
+        }
+        .hero-accent-line { /* Specific for hero if needed */
+             margin: 15px 0;
+        }
+
+        .testimonial-card {
+            position: relative;
+            padding-left: 3rem; /* Space for quote icon */
+        }
+        .testimonial-card::before {
+            content: '\f10d'; /* Font Awesome quote-left */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0.5rem;
+            top: 1rem;
+            font-size: 1.75rem;
+            color: var(--primary-color);
+            opacity: 0.3;
+        }
+
+        /* Input focus state */
+        input:focus, textarea:focus {
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3); /* Primary color focus ring */
+            border-color: var(--primary-color);
+        }
+
+        /* Smooth hover for social icons */
+        .social-icon {
+            transition: transform 0.2s ease-out, background-color 0.2s ease-out;
+        }
+        .social-icon:hover {
+            transform: scale(1.1);
+            background-color: #d1d5db; /* Slightly darker gray */
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header / Hero Section -->
+    <header class="relative overflow-hidden py-24 px-6 lg:px-8 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white min-h-[70vh] flex items-center">
+        <!-- Subtle Background Pattern (Optional) -->
+        <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2228%22 height=%2249%22 viewBox=%220 0 28 49%22%3E%3Cg fill-rule=%22evenodd%22%3E%3Cg id=%22hexagons%22 fill=%22%23ffffff%22 fill-opacity=%221%22 fill-rule=%22nonzero%22%3E%3Cpath d=%22M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.99-7.5L26 15v18.5l-13 7.5L0 33.5V15z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+
+        <div class="container mx-auto max-w-7xl relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div data-aos="fade-right" data-aos-delay="100">
+                    <h1 class="text-5xl md:text-6xl font-bold mb-3 playfair leading-tight">YOUR NAME</h1>
+                    <div class="accent-line hero-accent-line bg-white"></div>
+                    <h2 class="text-xl md:text-2xl mt-5 font-light opacity-90">Graphic Designer | Photographer | Video Editor</h2>
+                    <p class="mt-6 text-lg leading-relaxed max-w-lg opacity-80">Crafting compelling visual narratives that resonate. I blend creativity, technical precision, and artistic flair to elevate every project.</p>
+                    <div class="flex flex-wrap gap-4 mt-10">
+                        <a href="#contact" class="bg-white text-indigo-600 px-8 py-3 rounded-md font-semibold hover:bg-opacity-90 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">Get In Touch</a>
+                        <a href="#portfolio" class="border-2 border-white text-white px-8 py-3 rounded-md font-semibold hover:bg-white hover:bg-opacity-10 transition duration-300 transform hover:-translate-y-1">View My Work</a>
+                    </div>
+                </div>
+                <div class="hidden md:flex justify-center items-center" data-aos="fade-left" data-aos-delay="300">
+                     <div class="relative w-80 h-80 lg:w-96 lg:h-96">
+                        <!-- Replace with your actual photo -->
+                        <div class="absolute inset-0 rounded-full border-8 border-white border-opacity-50 shadow-xl overflow-hidden">
+                             <img src="https://via.placeholder.com/400x400/e2e8f0/94a3b8?text=Your+Portrait" alt="Your Name - Professional Photo" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Optional decorative elements -->
+                        <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-pink-400 rounded-full opacity-60 filter blur-lg animate-pulse"></div>
+                        <div class="absolute -top-8 -right-8 w-20 h-20 bg-indigo-400 rounded-lg opacity-50 transform rotate-12 filter blur-md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Removed SVG wave, can be added back if desired -->
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 px-6 lg:px-8">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold playfair mb-4">About Me</h2>
+                <div class="accent-line"></div>
+                <p class="mt-5 text-lg text-gray-600 max-w-3xl mx-auto">A dedicated creative professional fueled by a passion for visual excellence across multiple disciplines.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                <div data-aos="fade-right" data-aos-delay="100">
+                     <div class="bg-white p-8 rounded-lg shadow-lg relative border-l-4 border-indigo-500">
+                        <h3 class="text-3xl font-semibold mb-5 playfair text-indigo-700">My Creative Journey</h3>
+                        <p class="text-gray-700 mb-5">With over <strong class="font-semibold">[X]</strong> years immersed in the creative field, I've cultivated a versatile skill set encompassing graphic design, photography, and video editing. My fascination with visual storytelling ignited [briefly mention your origin story or passion driver - e.g., during my studies, experimenting with my first camera, etc.].</p>
+                        <p class="text-gray-700 mb-5">I thrive on crafting cohesive brand identities, freezing impactful moments through my lens, and producing polished videos that articulate client messages with clarity and impact.</p>
+                        <h3 class="text-3xl font-semibold mt-10 mb-5 playfair text-indigo-700">Philosophy & Approach</h3>
+                        <p class="text-gray-700">I champion the synthesis of aesthetics and purpose. My work is dedicated to creating visuals that are not only striking but also strategically effective. Collaboration is key – I partner closely with clients to truly understand their vision and translate it into exceptional results.</p>
+                    </div>
+                </div>
+
+                <div data-aos="fade-left" data-aos-delay="200">
+                    <h3 class="text-3xl font-semibold mb-8 playfair text-indigo-700">Core Skills</h3>
+
+                    <div class="skill-bar-container">
+                        <div class="flex justify-between mb-1">
+                            <span class="font-medium text-gray-700">Graphic Design (Adobe CC)</span>
+                            <span class="skill-percent">90%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-bar-fill" style="width: 0%" data-width="90%"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-bar-container">
+                        <div class="flex justify-between mb-1">
+                            <span class="font-medium text-gray-700">Photography & Retouching</span>
+                             <span class="skill-percent">85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-bar-fill" style="width: 0%" data-width="85%"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-bar-container">
+                        <div class="flex justify-between mb-1">
+                            <span class="font-medium text-gray-700">Video Editing (Premiere Pro/FCPX)</span>
+                             <span class="skill-percent">80%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-bar-fill" style="width: 0%" data-width="80%"></div>
+                        </div>
+                    </div>
+
+                     <div class="skill-bar-container">
+                        <div class="flex justify-between mb-1">
+                            <span class="font-medium text-gray-700">Motion Graphics (After Effects)</span>
+                            <span class="skill-percent">75%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-bar-fill" style="width: 0%" data-width="75%"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-bar-container">
+                        <div class="flex justify-between mb-1">
+                            <span class="font-medium text-gray-700">UI/UX Principles (Figma/XD)</span>
+                            <span class="skill-percent">70%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-bar-fill" style="width: 0%" data-width="70%"></div>
+                        </div>
+                    </div>
+                      <div class="skill-bar-container">
+                        <div class="flex justify-between mb-1">
+                            <span class="font-medium text-gray-700">3D Basics (Blender/C4D)</span>
+                            <span class="skill-percent">65%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-bar-fill" style="width: 0%" data-width="65%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-24 px-6 lg:px-8 section-bg">
+        <div class="container mx-auto max-w-7xl">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold playfair mb-4">Featured Work</h2>
+                <div class="accent-line"></div>
+                <p class="mt-5 text-lg text-gray-600 max-w-3xl mx-auto">A glimpse into projects where creativity met purpose and delivered results.</p>
+            </div>
+
+            <!-- Portfolio Tabs -->
+            <div class="mb-12" data-aos="fade-up" data-aos-delay="100">
+                <div class="flex flex-wrap justify-center mb-10 gap-3">
+                    <button class="tab-btn px-6 py-2 rounded-full font-medium transition duration-300 ease-in-out active" data-tab="all">All Projects</button>
+                    <button class="tab-btn px-6 py-2 rounded-full font-medium transition duration-300 ease-in-out" data-tab="graphic-design">Graphic Design</button>
+                    <button class="tab-btn px-6 py-2 rounded-full font-medium transition duration-300 ease-in-out" data-tab="photography">Photography</button>
+                    <button class="tab-btn px-6 py-2 rounded-full font-medium transition duration-300 ease-in-out" data-tab="video">Video</button>
+                </div>
+
+                <!-- Portfolio Grid Container -->
+                 <div class="relative">
+                    <!-- All Projects Tab -->
+                    <div class="tab-content active" id="all-content">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                            <!-- Project 1 (Graphic Design) -->
+                            <div class="portfolio-item bg-white rounded-lg shadow-md" data-aos="zoom-in-up">
+                                <img src="https://via.placeholder.com/600x400/a5b4fc/1e293b?text=Brand+Identity" alt="Brand Identity Project" class="h-64">
+                                <div class="overlay">
+                                    <h3 class="text-xl font-bold mb-2">Brand Identity Design</h3>
+                                    <p class="text-sm mb-4 opacity-90">Logo, guidelines, and assets for Client X.</p>
+                                    <a href="#" class="mt-2 px-4 py-1 border border-white rounded-full text-xs hover:bg-white hover:text-indigo-600 transition">View Details</a>
+                                </div>
+                                <div class="p-5 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none">
+                                     <span class="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-medium">Graphic Design</span>
+                                </div>
+                            </div>
+                            <!-- Project 2 (Photography) -->
+                            <div class="portfolio-item bg-white rounded-lg shadow-md" data-aos="zoom-in-up" data-aos-delay="100">
+                                <img src="https://via.placeholder.com/600x400/c4b5fd/1e293b?text=Urban+Exploration" alt="Urban Photography Series" class="h-64">
+                                <div class="overlay">
+                                    <h3 class="text-xl font-bold mb-2">Urban Photography</h3>
+                                    <p class="text-sm mb-4 opacity-90">Capturing architectural lines and city life.</p>
+                                    <a href="#" class="mt-2 px-4 py-1 border border-white rounded-full text-xs hover:bg-white hover:text-indigo-600 transition">View Details</a>
+                                </div>
+                               <div class="p-5 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none">
+                                     <span class="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">Photography</span>
+                                </div>
+                            </div>
+                            <!-- Project 3 (Video) -->
+                            <div class="portfolio-item bg-white rounded-lg shadow-md" data-aos="zoom-in-up" data-aos-delay="200">
+                               <img src="https://via.placeholder.com/600x400/f9a8d4/1e293b?text=Product+Commercial" alt="Product Commercial Video" class="h-64">
+                                <div class="overlay">
+                                    <h3 class="text-xl font-bold mb-2">Product Commercial</h3>
+                                    <p class="text-sm mb-4 opacity-90">Dynamic 30s spot for Tech Gadget Co.</p>
+                                    <a href="#" class="mt-2 px-4 py-1 border border-white rounded-full text-xs hover:bg-white hover:text-indigo-600 transition">View Details</a>
+                                </div>
+                                <div class="p-5 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none">
+                                     <span class="text-xs bg-pink-100 text-pink-700 px-3 py-1 rounded-full font-medium">Video</span>
+                                </div>
+                            </div>
+                             <!-- Project 4 (Graphic Design) -->
+                            <div class="portfolio-item bg-white rounded-lg shadow-md" data-aos="zoom-in-up">
+                                <img src="https://via.placeholder.com/600x400/a5b4fc/1e293b?text=Magazine+Layout" alt="Magazine Layout Design" class="h-64">
+                                <div class="overlay">
+                                    <h3 class="text-xl font-bold mb-2">Magazine Layout</h3>
+                                    <p class="text-sm mb-4 opacity-90">Editorial design for 'Lifestyle Today'.</p>
+                                    <a href="#" class="mt-2 px-4 py-1 border border-white rounded-full text-xs hover:bg-white hover:text-indigo-600 transition">View Details</a>
+                                </div>
+                               <div class="p-5 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none">
+                                     <span class="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-medium">Graphic Design</span>
+                                </div>
+                            </div>
+                             <!-- Project 5 (Photography) -->
+                             <div class="portfolio-item bg-white rounded-lg shadow-md" data-aos="zoom-in-up" data-aos-delay="100">
+                                <img src="https://via.placeholder.com/600x400/c4b5fd/1e293b?text=Corporate+Portraits" alt="Corporate Portrait Photography" class="h-64">
+                                <div class="overlay">
+                                    <h3 class="text-xl font-bold mb-2">Executive Portraits</h3>
+                                    <p class="text-sm mb-4 opacity-90">Professional headshots for leadership team.</p>
+                                    <a href="#" class="mt-2 px-4 py-1 border border-white rounded-full text-xs hover:bg-white hover:text-indigo-600 transition">View Details</a>
+                                </div>
+                                <div class="p-5 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none">
+                                     <span class="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">Photography</span>
+                                </div>
+                            </div>
+                             <!-- Project 6 (Video) -->
+                            <div class="portfolio-item bg-white rounded-lg shadow-md" data-aos="zoom-in-up" data-aos-delay="200">
+                                <img src="https://via.placeholder.com/600x400/f9a8d4/1e293b?text=Event+Highlight+Reel" alt="Event Highlight Video" class="h-64">
+                                <div class="overlay">
+                                    <h3 class="text-xl font-bold mb-2">Conference Highlights</h3>
+                                    <p class="text-sm mb-4 opacity-90">Capturing the energy of the Annual Tech Summit.</p>
+                                    <a href="#" class="mt-2 px-4 py-1 border border-white rounded-full text-xs hover:bg-white hover:text-indigo-600 transition">View Details</a>
+                                </div>
+                                <div class="p-5 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none">
+                                     <span class="text-xs bg-pink-100 text-pink-700 px-3 py-1 rounded-full font-medium">Video</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Graphic Design Tab -->
+                    <div class="tab-content" id="graphic-design-content">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                            <!-- Project 1 (Graphic Design) -->
+                             <div class="portfolio-item bg-white rounded-lg shadow-md" data-aos="zoom-in-up">
+                                <img src="https://via.placeholder.com/600x400/a5b4fc/1e293b?text=Brand+Identity" alt="Brand Identity Project" class="h-64">
+                                <div class="overlay">
+                                    <h3 class="text-xl font-bold mb-2">Brand Identity Design</h3>
+                                    <p class="text-sm mb-4 opacity-90">Logo, guidelines, and assets for Client X.</p>
+                                    <a href="#" class="mt-2 px-4 py-1 border border-white rounded-full text-xs hover:bg-white hover:text-indigo-600 transition">View Details</a>
+                                </div>
+                               <div class="p-5 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none">
+                                     <span class="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-medium">Graphic Design</span>
+                                </div>
+                            </div>
+                           <!-- Project 4 (Graphic Design) -->
+                            <div class="portfolio-item bg-white rounded-lg shadow-md" data-aos="zoom-in-up" data-aos-delay="100">
+                                <img src="https://via.placeholder.com/600x400/a5b4fc/1e293b?text=Magazine+Layout" alt="Magazine Layout Design" class="h-64">
+                                <div class="overlay">
+                                    <h3 class="text-xl font-bold mb-2">Magazine Layout</h3>
+                                    <p class="text-sm mb-4 opacity-90">Editorial design for 'Lifestyle Today'.</p>
+                                    <a href="#" class="mt-2 px-4 py-1 border border-white rounded-full text-xs hover:bg-white hover:text-indigo-600 transition">View Details</a>
+                                </div>
+                               <div class="p-5 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none">
+                                     <span class="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full font-medium">Graphic Design</span>
+                                </div>
+                            </div>
+                            <!-- Add more graphic design projects here -->
+                        </div>
+                    </div>
+
+                    <!-- Photography Tab -->
+                    <div class="tab-content" id="photography-content">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                             <!-- Project 2 (Photography) -->
+                            <div class="portfolio-item bg-white rounded-lg shadow-md" data-aos="zoom-in-up">
+                                <img src="https://via.placeholder.com/600x400/c4b5fd/1e293b?text=Urban+Exploration" alt="Urban Photography Series" class="h-64">
+                                <div class="overlay">
+                                    <h3 class="text-xl font-bold mb-2">Urban Photography</h3>
+                                    <p class="text-sm mb-4 opacity-90">Capturing architectural lines and city life.</p>
+                                    <a href="#" class="mt-2 px-4 py-1 border border-white rounded-full text-xs hover:bg-white hover:text-indigo-600 transition">View Details</a>
+                                </div>
+                                <div class="p-5 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none">
+                                     <span class="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">Photography</span>
+                                </div>
+                            </div>
+                            <!-- Project 5 (Photography) -->
+                             <div class="portfolio-item bg-white rounded-lg shadow-md" data-aos="zoom-in-up" data-aos-delay="100">
+                                <img src="https://via.placeholder.com/600x400/c4b5fd/1e293b?text=Corporate+Portraits" alt="Corporate Portrait Photography" class="h-64">
+                                <div class="overlay">
+                                    <h3 class="text-xl font-bold mb-2">Executive Portraits</h3>
+                                    <p class="text-sm mb-4 opacity-90">Professional headshots for leadership team.</p>
+                                    <a href="#" class="mt-2 px-4 py-1 border border-white rounded-full text-xs hover:bg-white hover:text-indigo-600 transition">View Details</a>
+                                </div>
+                               <div class="p-5 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none">
+                                     <span class="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">Photography</span>
+                                </div>
+                            </div>
+                            <!-- Add more photography projects here -->
+                        </div>
+                    </div>
+
+                    <!-- Video Editing Tab -->
+                    <div class="tab-content" id="video-content">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                             <!-- Project 3 (Video) -->
+                            <div class="portfolio-item bg-white rounded-lg shadow-md" data-aos="zoom-in-up">
+                               <img src="https://via.placeholder.com/600x400/f9a8d4/1e293b?text=Product+Commercial" alt="Product Commercial Video" class="h-64">
+                                <div class="overlay">
+                                    <h3 class="text-xl font-bold mb-2">Product Commercial</h3>
+                                    <p class="text-sm mb-4 opacity-90">Dynamic 30s spot for Tech Gadget Co.</p>
+                                    <a href="#" class="mt-2 px-4 py-1 border border-white rounded-full text-xs hover:bg-white hover:text-indigo-600 transition">View Details</a>
+                                </div>
+                               <div class="p-5 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none">
+                                     <span class="text-xs bg-pink-100 text-pink-700 px-3 py-1 rounded-full font-medium">Video</span>
+                                </div>
+                            </div>
+                             <!-- Project 6 (Video) -->
+                            <div class="portfolio-item bg-white rounded-lg shadow-md" data-aos="zoom-in-up" data-aos-delay="100">
+                                <img src="https://via.placeholder.com/600x400/f9a8d4/1e293b?text=Event+Highlight+Reel" alt="Event Highlight Video" class="h-64">
+                                <div class="overlay">
+                                    <h3 class="text-xl font-bold mb-2">Conference Highlights</h3>
+                                    <p class="text-sm mb-4 opacity-90">Capturing the energy of the Annual Tech Summit.</p>
+                                    <a href="#" class="mt-2 px-4 py-1 border border-white rounded-full text-xs hover:bg-white hover:text-indigo-600 transition">View Details</a>
+                                </div>
+                               <div class="p-5 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent pointer-events-none">
+                                     <span class="text-xs bg-pink-100 text-pink-700 px-3 py-1 rounded-full font-medium">Video</span>
+                                </div>
+                            </div>
+                           <!-- Add more video projects here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="text-center mt-16" data-aos="fade-up">
+                 <a href="#contact" class="bg-indigo-600 text-white px-10 py-4 rounded-md font-semibold hover:bg-indigo-700 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1 text-lg">Discuss Your Project</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 px-6 lg:px-8">
+        <div class="container mx-auto max-w-7xl">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold playfair mb-4">Creative Services</h2>
+                <div class="accent-line"></div>
+                <p class="mt-5 text-lg text-gray-600 max-w-3xl mx-auto">Offering a spectrum of creative solutions designed to elevate your brand and message.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                <!-- Service 1 -->
+                <div class="service-card bg-white p-8 rounded-lg shadow-md text-center md:text-left" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-20 h-20 service-icon-bg rounded-xl flex items-center justify-center mb-6 mx-auto md:mx-0">
+                        <i class="fas fa-drafting-compass text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4 playfair text-indigo-700">Graphic Design</h3>
+                    <p class="text-gray-600 mb-6">Strategic design solutions across print and digital platforms, focusing on brand coherence and visual appeal.</p>
+                    <ul class="text-gray-600 space-y-2 text-left text-sm list-inside list-none">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-indigo-500 mr-2 opacity-75"></i> Brand Identity & Logo Systems</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-indigo-500 mr-2 opacity-75"></i> Marketing Collateral (Print/Digital)</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-indigo-500 mr-2 opacity-75"></i> Social Media Graphics & Ads</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-indigo-500 mr-2 opacity-75"></i> UI/UX Consultation & Design</li>
+                    </ul>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="service-card bg-white p-8 rounded-lg shadow-md text-center md:text-left" data-aos="fade-up" data-aos-delay="200">
+                     <div class="w-20 h-20 service-icon-bg rounded-xl flex items-center justify-center mb-6 mx-auto md:mx-0">
+                        <i class="fas fa-camera-retro text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4 playfair text-purple-700">Photography</h3>
+                    <p class="text-gray-600 mb-6">Professional photography capturing the essence of products, people, and places, enhanced by expert retouching.</p>
+                    <ul class="text-gray-600 space-y-2 text-left text-sm list-inside list-none">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-purple-500 mr-2 opacity-75"></i> Commercial & Product Shoots</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-purple-500 mr-2 opacity-75"></i> Corporate Headshots & Events</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-purple-500 mr-2 opacity-75"></i> Lifestyle & Portrait Sessions</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-purple-500 mr-2 opacity-75"></i> Architectural & Interior Imagery</li>
+                    </ul>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="service-card bg-white p-8 rounded-lg shadow-md text-center md:text-left" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-20 h-20 service-icon-bg rounded-xl flex items-center justify-center mb-6 mx-auto md:mx-0">
+                        <i class="fas fa-video text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4 playfair text-pink-700">Video Production</h3>
+                    <p class="text-gray-600 mb-6">End-to-end video services, from concept to final cut, delivering engaging narratives and high production value.</p>
+                     <ul class="text-gray-600 space-y-2 text-left text-sm list-inside list-none">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-pink-500 mr-2 opacity-75"></i> Promotional & Brand Videos</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-pink-500 mr-2 opacity-75"></i> Event Coverage & Highlight Reels</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-pink-500 mr-2 opacity-75"></i> Social Media & Web Content</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-pink-500 mr-2 opacity-75"></i> Motion Graphics & Titles</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-24 px-6 lg:px-8 section-bg">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold playfair mb-4">Client Experiences</h2>
+                <div class="accent-line"></div>
+                <p class="mt-5 text-lg text-gray-600 max-w-3xl mx-auto">Hear directly from those who've partnered with me on their creative projects.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card bg-white p-8 rounded-lg shadow-lg border-t-4 border-indigo-400" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center mb-5">
+                         <img src="https://via.placeholder.com/50x50/cbd5e1/475569?text=JS" alt="Client Jane Smith" class="w-12 h-12 rounded-full mr-4 object-cover">
+                        <div>
+                            <h4 class="font-semibold text-lg">Jane Smith</h4>
+                            <p class="text-gray-500 text-sm">Marketing Director, Innovate Co.</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic text-md leading-relaxed">"Working with [Your Name] elevated our brand significantly. Their unique creative perspective combined with technical prowess resulted in designs that truly resonated with our audience. Professional, timely, and exceptional quality."</p>
+                    <div class="mt-5 flex text-yellow-400 text-lg">
+                        <i class="fas fa-star"></i><i class="fas fa-star ml-1"></i><i class="fas fa-star ml-1"></i><i class="fas fa-star ml-1"></i><i class="fas fa-star ml-1"></i>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card bg-white p-8 rounded-lg shadow-lg border-t-4 border-purple-400" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center mb-5">
+                        <img src="https://via.placeholder.com/50x50/e2e8f0/475569?text=MJ" alt="Client Michael Johnson" class="w-12 h-12 rounded-full mr-4 object-cover">
+                        <div>
+                            <h4 class="font-semibold text-lg">Michael Johnson</h4>
+                            <p class="text-gray-500 text-sm">Founder, TechStart Inc.</p>
+                        </div>
+                    </div>
+                     <p class="text-gray-700 italic text-md leading-relaxed">"The product photography was simply outstanding. [Your Name] has an incredible eye for detail and lighting. Our online sales saw a noticeable boost shortly after updating the visuals. Highly recommended!"</p>
+                    <div class="mt-5 flex text-yellow-400 text-lg">
+                        <i class="fas fa-star"></i><i class="fas fa-star ml-1"></i><i class="fas fa-star ml-1"></i><i class="fas fa-star ml-1"></i><i class="fas fa-star ml-1"></i>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                 <div class="testimonial-card bg-white p-8 rounded-lg shadow-lg border-t-4 border-pink-400" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex items-center mb-5">
+                        <img src="https://via.placeholder.com/50x50/fbcfe8/475569?text=SW" alt="Client Sarah Williams" class="w-12 h-12 rounded-full mr-4 object-cover">
+                        <div>
+                            <h4 class="font-semibold text-lg">Sarah Williams</h4>
+                            <p class="text-gray-500 text-sm">Events Lead, Global Conf.</p>
+                        </div>
+                    </div>
+                     <p class="text-gray-700 italic text-md leading-relaxed">"The conference highlight reel was perfect! [Your Name] skillfully condensed three days of footage into a dynamic, engaging summary that captured the event's spirit beautifully. Fantastic editing work."</p>
+                     <div class="mt-5 flex text-yellow-400 text-lg">
+                        <i class="fas fa-star"></i><i class="fas fa-star ml-1"></i><i class="fas fa-star ml-1"></i><i class="fas fa-star ml-1"></i><i class="fas fa-star-half-alt ml-1"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 px-6 lg:px-8">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold playfair mb-4">Let's Collaborate</h2>
+                <div class="accent-line"></div>
+                <p class="mt-5 text-lg text-gray-600 max-w-3xl mx-auto">Have a project in mind or just want to connect? Reach out!</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div data-aos="fade-right" data-aos-delay="100">
+                    <h3 class="text-3xl font-semibold mb-8 playfair text-indigo-700">Contact Details</h3>
+                    <div class="space-y-8">
+                        <div class="flex items-start group">
+                            <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-5 text-indigo-600 text-xl transition group-hover:bg-indigo-600 group-hover:text-white">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-1">Email</h4>
+                                <a href="mailto:your.email@example.com" class="text-gray-600 hover:text-indigo-600 transition">your.email@example.com</a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start group">
+                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-5 text-purple-600 text-xl transition group-hover:bg-purple-600 group-hover:text-white">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-1">Phone</h4>
+                                <a href="tel:+11234567890" class="text-gray-600 hover:text-purple-600 transition">+1 (123) 456-7890</a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start group">
+                            <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mr-5 text-pink-600 text-xl transition group-hover:bg-pink-600 group-hover:text-white">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg mb-1">Location</h4>
+                                <p class="text-gray-600">City, State, Country (or Remote)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-3xl font-semibold mt-16 mb-6 playfair text-indigo-700">Connect Online</h3>
+                    <div class="flex space-x-4">
+                         <!-- Add your actual social links! -->
+                        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile" class="social-icon w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600 hover:text-indigo-600">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                         <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Behance Profile" class="social-icon w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600 hover:text-indigo-600">
+                            <i class="fab fa-behance text-xl"></i>
+                        </a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" class="social-icon w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600 hover:text-indigo-600">
+                            <i class="fab fa-linkedin-in text-xl"></i>
+                        </a>
+                         <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Vimeo Profile" class="social-icon w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600 hover:text-indigo-600">
+                            <i class="fab fa-vimeo-v text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div data-aos="fade-left" data-aos-delay="200">
+                    <h3 class="text-3xl font-semibold mb-8 playfair text-indigo-700">Send a Message</h3>
+                    <form class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-gray-700 mb-2 font-medium">Name</label>
+                            <input type="text" id="name" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-gray-700 mb-2 font-medium">Email</label>
+                            <input type="email" id="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
+                        </div>
+
+                        <div>
+                            <label for="subject" class="block text-gray-700 mb-2 font-medium">Subject</label>
+                            <input type="text" id="subject" name="subject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 transition">
+                        </div>
+
+                        <div>
+                            <label for="message" class="block text-gray-700 mb-2 font-medium">Message</label>
+                            <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none transition"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-indigo-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-indigo-700 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1 text-lg">Send Message</button>
+                    </form>
+                     <!-- Add a note for form handling -->
+                     <p class="text-xs text-gray-500 mt-4">*Note: Form submission requires backend setup (e.g., Formspree, Netlify Forms, or custom backend).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 px-6 lg:px-8 bg-gray-900 text-gray-400">
+        <div class="container mx-auto max-w-7xl">
+            <div class="flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+                <div class="mb-6 md:mb-0">
+                    <h2 class="text-3xl font-bold playfair text-white mb-2">YOUR NAME</h2>
+                    <p class="text-gray-500">Creative Visual Solutions</p>
+                     <!-- Optional: Add social links here too -->
+                     <div class="flex space-x-3 mt-4 justify-center md:justify-start">
+                        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram text-lg"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Behance Profile" class="text-gray-400 hover:text-white transition"><i class="fab fa-behance text-lg"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in text-lg"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Vimeo Profile" class="text-gray-400 hover:text-white transition"><i class="fab fa-vimeo-v text-lg"></i></a>
+                    </div>
+                </div>
+
+                <div class="text-sm">
+                    <p>© <span id="current-year"></span> Your Name. All Rights Reserved.</p>
+                    <p class="mt-1">Designed & Developed with <i class="fas fa-heart text-red-500 mx-1"></i></p>
+                     <!-- Optional: Link to portfolio source or your main website -->
+                     <!-- <p class="mt-1"><a href="#" class="hover:text-white underline">View Source</a></p> -->
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AOS Library JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800, // Animation duration
+            once: true, // Whether animation should happen only once - while scrolling down
+            offset: 100, // Offset (in px) from the original trigger point
+        });
+
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Portfolio tabs functionality
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const activeTabClasses = ['bg-indigo-600', 'text-white', 'shadow-md'];
+        const inactiveTabClasses = ['bg-gray-200', 'text-gray-700', 'hover:bg-indigo-100'];
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+
+                // Update Button Styles
+                tabButtons.forEach(btn => {
+                    btn.classList.remove(...activeTabClasses);
+                    btn.classList.add(...inactiveTabClasses);
+                    btn.classList.remove('active'); // Ensure 'active' class is removed
+                });
+                button.classList.add(...activeTabClasses);
+                button.classList.remove(...inactiveTabClasses);
+                 button.classList.add('active'); // Add back 'active' class
+
+                // Hide all tab contents
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+
+                // Show relevant tab content
+                const targetContent = document.getElementById(`${tabId}-content`);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                    // Optional: Re-initialize AOS for the new content if elements were hidden
+                    // AOS.refresh();
+                }
+            });
+        });
+
+        // Initial Tab Style Setup
+        tabButtons.forEach(button => {
+            if (button.classList.contains('active')) {
+                 button.classList.add(...activeTabClasses);
+                 button.classList.remove(...inactiveTabClasses);
+            } else {
+                 button.classList.add(...inactiveTabClasses);
+                 button.classList.remove(...activeTabClasses);
+            }
+        });
+
+
+        // Animate skill bars on scroll into view using Intersection Observer
+        const skillObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const skillBar = entry.target.querySelector('.skill-bar-fill');
+                    if (skillBar) {
+                         const targetWidth = skillBar.getAttribute('data-width');
+                         // Delay slightly for better visual effect
+                         setTimeout(() => {
+                            skillBar.style.width = targetWidth;
+                         }, 200);
+                    }
+                    observer.unobserve(entry.target); // Animate only once
+                }
+            });
+        }, { threshold: 0.5 }); // Trigger when 50% of the element is visible
+
+        document.querySelectorAll('.skill-bar-container').forEach(container => {
+            skillObserver.observe(container);
+        });
+
+    </script>
+</body>
+</html>
